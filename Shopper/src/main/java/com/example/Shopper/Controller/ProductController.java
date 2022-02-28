@@ -2,6 +2,7 @@ package com.example.Shopper.Controller;
 
 import com.example.Shopper.Entities.Product;
 import com.example.Shopper.Repository.ProductInterface;
+import com.example.Shopper.Service.ProductServiceInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,40 +17,26 @@ import java.util.UUID;
 public class ProductController {
 
     @Autowired
-    ProductInterface productInterface;
-    //@RequestHeader String productName, @RequestHeader Double productPrice
-    //@RequestAttribute String productName,@RequestAttribute Double productPrice
-    @PostMapping("/createProduct")
+    ProductServiceInterface productServiceInterface;
+    @RequestMapping("/product")
+
+    @PostMapping("/create")
     public Product createProduct(@RequestBody String productDetails) throws JSONException {
-          UUID productId = UUID.randomUUID();
-          JSONObject jsonObject = new JSONObject(productDetails);
-          String productName = jsonObject.getString("product_name");
-          Double productPrice =Double.parseDouble(jsonObject.getString("product_price"));
-          Product product = new Product(productId,productName,productPrice);
-         productInterface.save(product);
-          return product;
+         Product product = productServiceInterface.createProduct(productDetails);
+         return product;
     }
-    @PutMapping("/updatedProduct")
+    @PutMapping("/update")
     public Product updateProduct(@RequestBody Product updatedProduct) throws JSONException {
-        Optional<Product> oldProductData = productInterface.findById(updatedProduct.getProduct_id());
-        if (oldProductData.isPresent()) {
-           Product product = oldProductData.get();
-           product.setProduct_name(updatedProduct.getProduct_name());
-           product.setProduct_price(updatedProduct.getProduct_price());
-           productInterface.save(product);
-           return  product;
-        }
-        else {
-            return null;
-        }
+        Product product = productServiceInterface.updateProduct(updatedProduct);
+        return product;
+
     }
-    @GetMapping("/getProduct/{productId}")
+    @GetMapping("/get/{productId}")
     public Product getProduct(@PathVariable UUID productId){
-        Optional<Product> productData = productInterface.findById(productId);
-        return productData.get();
+        return productServiceInterface.getProduct(productId);
     }
-    @GetMapping("/getProducts")
+    @GetMapping("/get")
     public List<Product> getProducts(){
-       return (List<Product>) productInterface.findAll();
+       return productServiceInterface.getProducts();
     }
 }

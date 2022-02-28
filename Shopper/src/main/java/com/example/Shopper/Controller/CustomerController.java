@@ -3,6 +3,7 @@ package com.example.Shopper.Controller;
 import com.example.Shopper.Entities.Customer;
 import com.example.Shopper.Entities.Product;
 import com.example.Shopper.Repository.CustomerInterface;
+import com.example.Shopper.Service.CustomerServiceInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,42 +14,29 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/customer")
 public class CustomerController {
-    @Autowired
-    CustomerInterface customerInterface;
 
-    @PostMapping("/createCustomer")
+    @Autowired
+    CustomerServiceInterface customerServiceInterface;
+    @PostMapping("/create")
     public Customer createCustomer(@RequestBody String customerData)throws JSONException {
-        UUID customerId = UUID.randomUUID();
-        JSONObject jsonObject = new JSONObject(customerData);
-        String customerName = jsonObject.getString("customer_name");
-        String customerEmail  = jsonObject.getString("customer_email");
-        Long customerPhone =Long.parseLong(jsonObject.getString("customer_phone"));
-        Customer customer = new Customer(customerId,customerName,customerEmail,customerPhone);
-        customerInterface.save(customer);
+        Customer customer = customerServiceInterface.createCustomer(customerData);
         return customer;
     }
-    @PutMapping("/updateCustomer")
+    @PutMapping("/update")
     public Customer updateCustomer(@RequestBody Customer updatedCustomer){
-        Optional<Customer> oldCustomer = customerInterface.findById(updatedCustomer.getCustomer_id());
-        if (oldCustomer.isPresent()){
-            Customer customer = oldCustomer.get();
-            customer.setCustomer_name(updatedCustomer.getCustomer_name());
-            customer.setCustomer_email(updatedCustomer.getCustomer_email());
-            customer.setCustomer_phone(updatedCustomer.getCustomer_phone());
-            customerInterface.save(customer);
-            return customer;
-        }
-        else {
-            return null;
-        }
+        Customer customer = customerServiceInterface.updateCustomer(updatedCustomer);
+       return customer;
+
     }
-    @GetMapping("/getCustomers")
+    @GetMapping("/get")
     public List<Customer> getCustomers(){
-        return (List<Customer>) customerInterface.findAll();
+        return customerServiceInterface.getCustomers();
     }
-    @GetMapping("/getCustomer/{customer_id}")
+
+    @GetMapping("/get/{customer_id}")
     public Customer getCustomer(@PathVariable UUID customer_id){
-        return customerInterface.findById(customer_id).get();
+       return customerServiceInterface.getCustomer(customer_id);
     }
 }
