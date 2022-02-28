@@ -14,11 +14,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/product")
 public class ProductController {
 
     @Autowired
     ProductServiceInterface productServiceInterface;
-    @RequestMapping("/product")
 
     @PostMapping("/create")
     public Product createProduct(@RequestBody String productDetails) throws JSONException {

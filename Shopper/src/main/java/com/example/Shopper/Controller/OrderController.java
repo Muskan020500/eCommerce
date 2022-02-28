@@ -35,10 +35,7 @@ public class OrderController {
         return order;
 
     }
-    @GetMapping ("/get")
-    public MyOrder getOrders(){
-       return orderServiceInterface.getOrders();
-    }
+
     @GetMapping("/get/{order_id}")
     public MyOrder getOrder(@PathVariable UUID order_id){
         return orderServiceInterface.getOrder(order_id);
