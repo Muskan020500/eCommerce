@@ -1,5 +1,6 @@
 package com.example.Shopper.Controller;
 
+import com.example.Shopper.Common.APIResponse;
 import com.example.Shopper.Entities.Product;
 import com.example.Shopper.Repository.ProductInterface;
 import com.example.Shopper.Service.ProductServiceInterface;
@@ -21,22 +22,21 @@ public class ProductController {
     ProductServiceInterface productServiceInterface;
 
     @PostMapping("/create")
-    public Product createProduct(@RequestBody String productDetails) throws JSONException {
-         Product product = productServiceInterface.createProduct(productDetails);
-         return product;
+    public APIResponse createProduct(@RequestBody String productDetails) throws JSONException {
+         return productServiceInterface.createProduct(productDetails);
     }
     @PutMapping("/update")
-    public Product updateProduct(@RequestBody Product updatedProduct) throws JSONException {
-        Product product = productServiceInterface.updateProduct(updatedProduct);
-        return product;
+    public APIResponse updateProduct(@RequestBody Product updatedProduct) throws JSONException {
+        return productServiceInterface.updateProduct(updatedProduct);
+
 
     }
     @GetMapping("/get/{productId}")
-    public Product getProduct(@PathVariable UUID productId){
+    public APIResponse getProduct(@PathVariable UUID productId){
         return productServiceInterface.getProduct(productId);
     }
     @GetMapping("/get")
-    public List<Product> getProducts(){
+    public APIResponse getProducts(){
        return productServiceInterface.getProducts();
     }
 }

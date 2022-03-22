@@ -1,5 +1,6 @@
 package com.example.Shopper.Controller;
 
+import com.example.Shopper.Common.APIResponse;
 import com.example.Shopper.Entities.MyOrder;
 import com.example.Shopper.Entities.Product;
 import com.example.Shopper.Repository.OrderInterface;
@@ -24,35 +25,33 @@ public class OrderController {
     OrderServiceInterface orderServiceInterface;
 
     @PostMapping("/create")
-    public MyOrder createOrder(@RequestBody String orderDetails) throws JSONException {
-        MyOrder order = orderServiceInterface.createOrder(orderDetails);
-        return order;
+    public APIResponse createOrder(@RequestBody String orderDetails) throws JSONException {
+        return orderServiceInterface.createOrder(orderDetails);
 
     }
     @PutMapping("/update")
-    public MyOrder updateOrder(@RequestBody MyOrder updatedOrder){
-        MyOrder order = orderServiceInterface.updateOrder(updatedOrder);
-        return order;
+    public APIResponse updateOrder(@RequestBody MyOrder updatedOrder){
+        return orderServiceInterface.updateOrder(updatedOrder);
 
     }
 
     @GetMapping("/get/{order_id}")
-    public MyOrder getOrder(@PathVariable UUID order_id){
+    public APIResponse getOrder(@PathVariable UUID order_id){
         return orderServiceInterface.getOrder(order_id);
     }
     @PutMapping("/add/product/{order_id}")
-    public MyOrder addProduct(@RequestBody String ID,@PathVariable UUID order_id){
-        MyOrder order = orderServiceInterface.addProduct(ID,order_id);
-        return order;
+    public APIResponse addProduct(@RequestBody String ID,@PathVariable UUID order_id){
+       return orderServiceInterface.addProduct(ID,order_id);
+
     }
     @GetMapping("get/customerId/{customer_id}")
-    public List<MyOrder> getOrders(@PathVariable UUID customer_id){
-        List<MyOrder> orderList = orderServiceInterface.getOrders(customer_id);
-        return orderList;
+    public APIResponse getOrders(@PathVariable UUID customer_id){
+        return orderServiceInterface.getOrders(customer_id);
+
     }
     @GetMapping("get/product/{order_id}")
-    public List<Product> getProduct(@PathVariable UUID order_id){
-        List<Product> products = orderServiceInterface.getProduct(order_id);
-        return products;
+    public APIResponse getProduct(@PathVariable UUID order_id){
+        return orderServiceInterface.getProduct(order_id);
+
     }
 }

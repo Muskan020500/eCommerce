@@ -1,7 +1,11 @@
 package com.example.Shopper.Controller;
 
+import com.example.Shopper.Common.APIResponse;
 import com.example.Shopper.Entities.Customer;
 import com.example.Shopper.Entities.Product;
+import com.example.Shopper.Exception.CannotFindCustomerException;
+import com.example.Shopper.Exception.CannotFindServiceException;
+import com.example.Shopper.Exception.EmptyInputException;
 import com.example.Shopper.Repository.CustomerInterface;
 import com.example.Shopper.Service.CustomerServiceInterface;
 import org.json.JSONException;
@@ -20,23 +24,21 @@ public class CustomerController {
     @Autowired
     CustomerServiceInterface customerServiceInterface;
     @PostMapping("/create")
-    public Customer createCustomer(@RequestBody String customerData)throws JSONException {
-        Customer customer = customerServiceInterface.createCustomer(customerData);
-        return customer;
-    }
-    @PutMapping("/update")
-    public Customer updateCustomer(@RequestBody Customer updatedCustomer){
-        Customer customer = customerServiceInterface.updateCustomer(updatedCustomer);
-       return customer;
+    public APIResponse createCustomer(@RequestBody String customerData)throws JSONException ,EmptyInputException{
+        return customerServiceInterface.createCustomer(customerData);
 
     }
+    @PutMapping("/update")
+    public APIResponse updateCustomer(@RequestBody Customer updatedCustomer) throws CannotFindServiceException {
+        return customerServiceInterface.updateCustomer(updatedCustomer);
+    }
     @GetMapping("/get")
-    public List<Customer> getCustomers(){
+    public APIResponse getCustomers() throws CannotFindServiceException {
         return customerServiceInterface.getCustomers();
     }
 
     @GetMapping("/get/{customer_id}")
-    public Customer getCustomer(@PathVariable UUID customer_id){
+    public APIResponse getCustomer(@PathVariable UUID customer_id)throws CannotFindServiceException{
        return customerServiceInterface.getCustomer(customer_id);
     }
 }
